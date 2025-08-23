@@ -104,6 +104,19 @@ Windows
 - Or using Winget:
   winget install k6 -e --id k6.k6
 - Verify (PowerShell/CMD):
+RHEL/CentOS (dnf/yum)
+- Enable the official k6 RPM repo and install:
+  sudo dnf install -y https://dl.k6.io/rpm/repo.rpm || sudo yum install -y https://dl.k6.io/rpm/repo.rpm
+  sudo dnf install -y k6 || sudo yum install -y k6
+- Verify:
+  k6 version
+
+Arch Linux
+- Install from the official repos:
+  sudo pacman -Sy --noconfirm k6
+- Verify:
+  k6 version
+
   k6 version
 
 Reports
@@ -182,3 +195,18 @@ Notes
 - No Grafana/InfluxDB used
 - Public endpoints are used (httpbin, test.k6.io), suitable for demos
 - Thresholds are configured for demo stability; tune them as needed in config/default.json
+Troubleshooting
+- Corporate proxy
+  - Set proxies before running:
+    - Linux/macOS: export HTTP_PROXY=http://proxy:port; export HTTPS_PROXY=http://proxy:port
+    - Windows PowerShell: $env:HTTP_PROXY="http://proxy:port"; $env:HTTPS_PROXY="http://proxy:port"
+- TLS interception (corporate MITM)
+  - You can temporarily skip TLS verification for demos:
+    - k6 run --insecure-skip-tls-verify tests/api/sample_api_test.js
+    - Or environment: K6_INSECURE_SKIP_TLS_VERIFY=true
+- Docker permissions
+  - Ensure your user can run Docker without sudo (Linux):
+    sudo usermod -aG docker "$USER" && newgrp docker
+  - Restart Docker service if needed, or reopen your terminal.
+- Network/DNS
+  - If public endpoints are blocked, switch base URLs in config/default.json to allowed internal endpoints and re-run.
