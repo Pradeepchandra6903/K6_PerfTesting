@@ -48,7 +48,7 @@ Reports
 - HTML reports are generated under reports/ with timestamped filenames:
   - reports/api_sample_<timestamp>.html
   - reports/web_sample_<timestamp>.html
-
+- reports/*.html are gitignored and NOT committed; produce them locally for verification and in CI for archiving.
 Configuration
 - Edit config/default.json to change:
   - base URLs
