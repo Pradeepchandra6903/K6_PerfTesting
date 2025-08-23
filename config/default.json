@@ -1,0 +1,22 @@
+{
+  "api": {
+    "baseUrl": "https://httpbin.org",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  },
+  "web": {
+    "baseUrl": "https://test.k6.io"
+  },
+  "options": {
+    "vus": 5,
+    "duration": "10s",
+    "tags": {
+      "project": "k6-demo",
+      "env": "demo"
+    },
+    "thresholds": {
+      "http_req_duration": ["p(95)<3000"]
+    }
+  }
+}

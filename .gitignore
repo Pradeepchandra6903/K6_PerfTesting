@@ -1,0 +1,6 @@
+# Ignore generated HTML reports
+reports/*.html
+# Node-like cache/temp (just in case)
+*.tmp
+*.log
+.DS_Store
