@@ -59,22 +59,27 @@ B) Docker (no local k6 needed; ensure Docker is installed and running)
 
 C) Direct k6 commands (no Makefile; useful for Windows or explicit control)
 - Linux/macOS (bash/zsh):
+  ```bash
   export REPORTS_DIR=reports
   mkdir -p "$REPORTS_DIR"
   export REPORT_NAME=api_sample_$(date +%Y%m%d_%H%M%S)
   k6 run tests/api/sample_api_test.js
   export REPORT_NAME=web_sample_$(date +%Y%m%d_%H%M%S)
   k6 run tests/web/sample_web_test.js
+  ```
 
 - Windows PowerShell:
+  ```powershell
   $env:REPORTS_DIR="reports"
   New-Item -ItemType Directory -Force -Path $env:REPORTS_DIR | Out-Null
   $env:REPORT_NAME="api_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"
   k6 run tests/api/sample_api_test.js
   $env:REPORT_NAME="web_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"
   k6 run tests/web/sample_web_test.js
+  ```
 
 - Windows CMD:
+  ```cmd
   set REPORTS_DIR=reports
   if not exist reports mkdir reports
   for /f "tokens=1-4 delims=/ " %a in ("%date%") do set d=%d:~10,4%%d:~4,2%%d:~7,2%
@@ -83,6 +88,7 @@ C) Direct k6 commands (no Makefile; useful for Windows or explicit control)
   k6 run tests/api/sample_api_test.js
   set REPORT_NAME=web_sample_%d%_%t%
   k6 run tests/web/sample_web_test.js
+  ```
 
 OS-specific installation
 
@@ -117,8 +123,6 @@ Arch Linux
 - Verify:
   k6 version
 
-  k6 version
-
 Reports
 - HTML reports are generated under reports/ with timestamped filenames:
   - reports/api_sample_<timestamp>.html
@@ -139,14 +143,20 @@ How HTML Reporting Works
 
 Examples to run tests with explicit env vars
 - Linux/macOS:
+  ```bash
   REPORTS_DIR=reports REPORT_NAME=api_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/api/sample_api_test.js
   REPORTS_DIR=reports REPORT_NAME=web_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/web/sample_web_test.js
+  ```
 - Windows PowerShell:
+  ```powershell
   $env:REPORTS_DIR="reports"; $env:REPORT_NAME="api_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/api/sample_api_test.js
   $env:REPORTS_DIR="reports"; $env:REPORT_NAME="web_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/web/sample_web_test.js
+  ```
 - Windows CMD:
+  ```cmd
   set REPORTS_DIR=reports && set REPORT_NAME=api_sample_%date:/=%_%time::=% && k6 run tests\api\sample_api_test.js
   set REPORTS_DIR=reports && set REPORT_NAME=web_sample_%date:/=%_%time::=% && k6 run tests\web\sample_web_test.js
+  ```
 
 Local Commands (Make)
 - install-k6        Install official k6 apt repo and package (Ubuntu/Debian)
@@ -157,9 +167,13 @@ Local Commands (Make)
 
 Docker Usage (explicit commands)
 - API:
+  ```bash
   docker run --rm -e REPORTS_DIR=reports -e REPORT_NAME=api_sample_$(date +%Y%m%d_%H%M%S) -v "$PWD":/work -w /work grafana/k6:latest run tests/api/sample_api_test.js
+  ```
 - Web:
+  ```bash
   docker run --rm -e REPORTS_DIR=reports -e REPORT_NAME=web_sample_$(date +%Y%m%d_%H%M%S) -v "$PWD":/work -w /work grafana/k6:latest run tests/web/sample_web_test.js
+  ```
 
 Jenkins (both options supported)
 - See Jenkinsfile for a declarative pipeline:
@@ -180,12 +194,16 @@ Exact Steps (Demo Sequence)
    - make test-web
 2) macOS:
    - brew install k6
-   - REPORTS_DIR=reports REPORT_NAME=api_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/api/sample_api_test.js
-   - REPORTS_DIR=reports REPORT_NAME=web_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/web/sample_web_test.js
+   ```bash
+   REPORTS_DIR=reports REPORT_NAME=api_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/api/sample_api_test.js
+   REPORTS_DIR=reports REPORT_NAME=web_sample_$(date +%Y%m%d_%H%M%S) k6 run tests/web/sample_web_test.js
+   ```
 3) Windows (PowerShell):
    - choco install k6 -y   or   winget install k6 -e --id k6.k6
-   - $env:REPORTS_DIR="reports"; $env:REPORT_NAME="api_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/api/sample_api_test.js
-   - $env:REPORTS_DIR="reports"; $env:REPORT_NAME="web_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/web/sample_web_test.js
+   ```powershell
+   $env:REPORTS_DIR="reports"; $env:REPORT_NAME="api_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/api/sample_api_test.js
+   $env:REPORTS_DIR="reports"; $env:REPORT_NAME="web_sample_$(Get-Date -Format yyyyMMdd_HHmmss)"; k6 run tests/web/sample_web_test.js
+   ```
 4) Docker (any OS):
    - make docker-test-api
    - make docker-test-web
@@ -198,8 +216,15 @@ Notes
 Troubleshooting
 - Corporate proxy
   - Set proxies before running:
-    - Linux/macOS: export HTTP_PROXY=http://proxy:port; export HTTPS_PROXY=http://proxy:port
-    - Windows PowerShell: $env:HTTP_PROXY="http://proxy:port"; $env:HTTPS_PROXY="http://proxy:port"
+    - Linux/macOS:
+      ```bash
+      export HTTP_PROXY=http://proxy:port
+      export HTTPS_PROXY=http://proxy:port
+      ```
+    - Windows PowerShell:
+      ```powershell
+      $env:HTTP_PROXY="http://proxy:port"; $env:HTTPS_PROXY="http://proxy:port"
+      ```
 - TLS interception (corporate MITM)
   - You can temporarily skip TLS verification for demos:
     - k6 run --insecure-skip-tls-verify tests/api/sample_api_test.js
